@@ -1,0 +1,142 @@
+# deployment/ansible_deploy.yml
+---
+- name: Provision EdgeVision Smart Camera Gateways
+  hosts: edge_cameras
+  become: yes
+  vars:
+    project_root: "/opt/edgevision"
+    hailo_driver_version: "4.17.0"
+    device_user: "vision"
+
+  tasks:
+    - name: Update apt software repository packages
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install system runtime dependencies
+      apt:
+        name:
+          - python3-pip
+          - python3-venv
+          - ffmpeg
+          - sqlite3
+          - wireguard
+          - curl
+          - git
+          - dkms
+        state: present
+
+    # =========================================================================
+    # HAILO-8L NPU DRIVER AND CORE SDK INSTALLATION
+    # =========================================================================
+    - name: Check if Hailo PCIe driver is already compiled
+      shell: lsmod | grep hailo
+      register: hailo_module_check
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Download Hailo PCIe DKMS driver package
+      get_url:
+        url: "https://hailo-hailort.s3.eu-west-1.amazonaws.com/HailoRT/latest/hailort-pcie-driver-dkms_{{ hailo_driver_version }}_all.deb"
+        dest: "/tmp/hailort-pcie-driver.deb"
+      when: hailo_module_check.rc != 0
+
+    - name: Install Hailo PCIe DKMS driver
+      apt:
+        deb: "/tmp/hailort-pcie-driver.deb"
+      when: hailo_module_check.rc != 0
+      notify: Reboot Edge Device
+
+    # =========================================================================
+    # SANDBOX DIRECTORY STRUCTURES & USERS SETUP
+    # =========================================================================
+    - name: Create Vision group
+      group:
+        name: "{{ device_user }}"
+        state: present
+
+    - name: Create Vision system service user
+      user:
+        name: "{{ device_user }}"
+        group: "{{ device_user }}"
+        groups: "video,dialout" # Grant camera and system bus device access permissions
+        shell: /usr/sbin/nologin
+        system: yes
+        create_home: no
+
+    - name: Create project base directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ device_user }}"
+        group: "{{ device_user }}"
+        mode: '0750'
+      loop:
+        - "{{ project_root }}"
+        - "/var/lib/edgevision"
+        - "/etc/edgevision/certs"
+
+    # =========================================================================
+    # CODEBASE DISTRIBUTION & PIPELINE VIRTUALENV DEPLOYMENT
+    # =========================================================================
+    - name: Synchronize project Python files
+      copy:
+        src: "../src"
+        dest: "{{ project_root }}"
+        owner: "{{ device_user }}"
+        group: "{{ device_user }}"
+        mode: '0750'
+
+    - name: Create virtual environment and install packages
+      pip:
+        name:
+          - pydantic>=2.0.0
+          - opencv-python-headless
+          - paho-mqtt>=1.6.0
+          - numpy>=1.20.0
+        virtualenv: "{{ project_root }}/venv"
+        virtualenv_command: python3 -m venv
+
+    # =========================================================================
+    # SYSTEMD & METRICS SHIPPERS PROVISIONING
+    # =========================================================================
+    - name: Copy systemd unit file configuration
+      copy:
+        src: "edgevision.service"
+        dest: "/etc/systemd/system/edgevision.service"
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload Systemd Daemon
+
+    - name: Deploy WireGuard configuration
+      copy:
+        src: "wireguard_peer.conf"
+        dest: "/etc/wireguard/wg0.conf"
+        owner: root
+        group: root
+        mode: '0600'
+      notify: Restart WireGuard
+
+    - name: Enable and launch EdgeVision service
+      systemd:
+        name: edgevision.service
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Reload Systemd Daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Restart WireGuard
+      systemd:
+        name: wg-quick@wg0
+        state: restarted
+
+    - name: Reboot Edge Device
+      reboot:
+        msg: "Rebooting to compile and bind the Hailo PCIe DKMS kernel module."
+        connect_timeout: 300
+        reboot_timeout: 600

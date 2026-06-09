@@ -1,0 +1,2849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EdgeVision Platform Showcase - Case Study & Portfolio</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons (via unpkg) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-display: 'Outfit', var(--font-sans);
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      /* Theme colors (Premium Dark Mode) */
+      --bg-main: #0B0F19;
+      --bg-sidebar: #0F1424;
+      --bg-card: #151D35;
+      --bg-card-hover: #1C2646;
+      --bg-input: #1F2A4A;
+      
+      --border-color: #243258;
+      --border-hover: #374D87;
+      
+      --text-primary: #F3F4F6;
+      --text-secondary: #9CA3AF;
+      --text-muted: #6B7280;
+      
+      /* Brand Accents */
+      --color-purple: #7F77DD;
+      --color-purple-hover: #968FE4;
+      --color-purple-glow: rgba(127, 119, 221, 0.2);
+      
+      --color-teal: #0EA5E9;
+      --color-teal-glow: rgba(14, 165, 233, 0.2);
+      
+      --color-green: #10B981;
+      --color-green-glow: rgba(16, 185, 129, 0.15);
+      
+      --color-amber: #F59E0B;
+      --color-amber-glow: rgba(245, 158, 11, 0.15);
+      
+      --color-coral: #EF4444;
+      --color-coral-glow: rgba(239, 68, 68, 0.15);
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-main);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-hover);
+    }
+
+    /* Container & Layout */
+    .app-container {
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 280px;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 1.75rem 1.25rem;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2rem;
+      padding: 0 0.5rem;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--color-purple), var(--color-teal));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(127, 119, 221, 0.4);
+    }
+
+    .brand-logo svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #ffffff, #c7d2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: -2px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: auto;
+    }
+
+    .nav-item {
+      width: 100%;
+    }
+
+    .nav-btn {
+      width: 100%;
+      background: none;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-align: left;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-btn i, .nav-btn svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.2s;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--bg-card);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn:hover svg {
+      transform: translateX(2px);
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(to right, var(--bg-card), rgba(127, 119, 221, 0.1));
+      color: var(--text-primary);
+      border-color: var(--border-color);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .nav-btn.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 25%;
+      height: 50%;
+      width: 4px;
+      background-color: var(--color-purple);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .sidebar-footer {
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .runtime-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      background-color: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--color-green);
+      box-shadow: 0 0 8px var(--color-green);
+      animation: pulse 2s infinite;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Top Header Bar */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.25rem;
+    }
+
+    .header-info h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.75rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .header-info p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .header-badge-list {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* General Styling Components */
+    .section-content {
+      display: none;
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .section-content.active {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .grid-3-2 {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 1.5rem;
+    }
+
+    .grid-1-2 {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1200px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3-2, .grid-1-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .app-container { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border-color); padding: 1.25rem; }
+      .main-content { padding: 1.25rem; }
+      .grid-4, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Card styling */
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title-bar h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title-bar h3 svg {
+      width: 18px;
+      height: 18px;
+      color: var(--color-purple);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.725rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-purple { background-color: var(--color-purple-glow); color: #C7D2FE; border: 1px solid rgba(127, 119, 221, 0.4); }
+    .badge-teal { background-color: var(--color-teal-glow); color: #bae6fd; border: 1px solid rgba(14, 165, 233, 0.4); }
+    .badge-green { background-color: var(--color-green-glow); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-amber { background-color: var(--color-amber-glow); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-coral { background-color: var(--color-coral-glow); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    /* Metric HUD */
+    .metric-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-glow, var(--color-purple)), transparent);
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .metric-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .metric-meta.trend-up { color: var(--color-green); }
+    .metric-meta.trend-down { color: var(--color-coral); }
+
+    /* Typography & Lists */
+    p.description {
+      color: var(--text-secondary);
+      font-size: 0.925rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bullet-list li {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .bullet-list li::before {
+      content: '→';
+      color: var(--color-purple);
+      font-weight: bold;
+    }
+
+    /* Key-Value Specs Table */
+    .spec-table {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.875rem;
+    }
+
+    .spec-row:last-child {
+      border-bottom: none;
+    }
+
+    .spec-label {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spec-value {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* Diagrams & Flows */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-node {
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .flow-node svg {
+      width: 14px;
+      height: 14px;
+      color: var(--color-teal);
+    }
+
+    .flow-node.active {
+      border-color: var(--color-purple);
+      box-shadow: 0 0 10px rgba(127, 119, 221, 0.15);
+    }
+
+    .flow-node.active svg {
+      color: var(--color-purple);
+    }
+
+    .flow-arrow {
+      color: var(--text-muted);
+      font-weight: bold;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Interactive Simulator */
+    .sim-panel {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 900px) {
+      .sim-panel { grid-template-columns: 1fr; }
+    }
+
+    .canvas-container {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      aspect-ratio: 16/9;
+      background-color: #030712;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    .canvas-hud {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-shadow: 0 1px 4px black;
+    }
+
+    .hud-left {
+      background-color: rgba(3, 7, 18, 0.7);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border-left: 2px solid var(--color-green);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hud-right {
+      background-color: rgba(3, 7, 18, 0.7);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .canvas-controls {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .canvas-btn-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .canvas-btn {
+      background-color: rgba(15, 20, 36, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .canvas-btn:hover {
+      background-color: var(--bg-card-hover);
+      border-color: var(--border-hover);
+    }
+
+    .canvas-btn.active {
+      background-color: var(--color-purple);
+      border-color: var(--color-purple);
+      color: white;
+    }
+
+    .sim-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 100%;
+      max-height: 420px;
+    }
+
+    .event-logger {
+      flex: 1;
+      background-color: #030712;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .log-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 6px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .log-item {
+      padding: 4px 6px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      border-left: 2px solid var(--text-muted);
+      background-color: rgba(255, 255, 255, 0.02);
+      animation: slideInLeft 0.15s ease-out;
+    }
+
+    .log-item.info { border-left-color: var(--color-teal); }
+    .log-item.warn { border-left-color: var(--color-amber); background-color: rgba(245, 158, 11, 0.03); }
+    .log-item.danger { border-left-color: var(--color-coral); background-color: rgba(239, 68, 68, 0.05); }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+
+    .log-msg {
+      color: var(--text-primary);
+    }
+
+    .sim-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .sim-stat-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .sim-stat-num {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .sim-stat-lbl {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Ring Buffer Visualizer */
+    .ring-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 0;
+      position: relative;
+    }
+
+    .ring-wrapper {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      border: 2px dashed var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-slot {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: bold;
+      transition: all 0.3s;
+      z-index: 2;
+    }
+
+    .ring-slot.filled {
+      background-color: var(--bg-input);
+      border-color: var(--color-teal);
+      color: var(--color-teal);
+    }
+
+    .ring-slot.reading {
+      background-color: var(--color-purple-glow);
+      border-color: var(--color-purple);
+      color: var(--color-purple);
+      box-shadow: 0 0 12px var(--color-purple);
+    }
+
+    .ring-slot.writing {
+      background-color: var(--color-green-glow);
+      border-color: var(--color-green);
+      color: var(--color-green);
+      box-shadow: 0 0 12px var(--color-green);
+    }
+
+    .ring-pointer {
+      position: absolute;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      pointer-events: none;
+      z-index: 3;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .pointer-write {
+      background-color: var(--color-green);
+      color: black;
+      box-shadow: 0 2px 8px var(--color-green-glow);
+    }
+
+    .pointer-read {
+      background-color: var(--color-purple);
+      color: white;
+      box-shadow: 0 2px 8px var(--color-purple-glow);
+    }
+
+    .ring-center {
+      width: 110px;
+      height: 110px;
+      background-color: var(--bg-sidebar);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      z-index: 1;
+      padding: 10px;
+    }
+
+    .ring-center-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ring-center-value {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-top: 2px;
+      color: var(--text-primary);
+    }
+
+    /* Code Hub Components */
+    .code-hub {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 1.5rem;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background-color: #030712;
+      height: 520px;
+    }
+    @media (max-width: 800px) {
+      .code-hub { grid-template-columns: 1fr; height: auto; }
+    }
+
+    .code-sidebar {
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      padding: 1.25rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .code-sidebar-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding-left: 10px;
+      margin-bottom: 8px;
+    }
+
+    .code-tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-align: left;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .code-tab-btn:hover {
+      background-color: var(--bg-card);
+      color: var(--text-primary);
+    }
+
+    .code-tab-btn.active {
+      background-color: var(--bg-input);
+      color: var(--color-purple);
+      font-weight: 600;
+      border-left: 2px solid var(--color-purple);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .code-display {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .code-header-bar {
+      background-color: var(--bg-sidebar);
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .code-file-name {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .copy-btn {
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .code-pre-wrapper {
+      flex: 1;
+      overflow: auto;
+      padding: 1.25rem;
+      position: relative;
+    }
+
+    pre code {
+      font-family: var(--font-mono);
+      font-size: 0.825rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      white-space: pre;
+    }
+
+    /* Highlight color syntax tokens (Simple RegExp implementation) */
+    .keyword { color: #f472b6; font-weight: 600; }
+    .builtin { color: #93c5fd; }
+    .string { color: #34d399; }
+    .comment { color: #6b7280; font-style: italic; }
+    .number { color: #fbbf24; }
+    .def { color: #a78bfa; font-weight: 600; }
+    .decorator { color: #fb7185; }
+
+    /* API Sandbox */
+    .api-explorer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .api-endpoint {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .api-endpoint:hover {
+      border-color: var(--border-hover);
+    }
+
+    .api-header {
+      background-color: var(--bg-card);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .api-method-path {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .api-method {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+    }
+
+    .api-method.get { background-color: rgba(16, 185, 129, 0.1); color: var(--color-green); border: 1px solid rgba(16, 185, 129, 0.2); }
+    .api-method.post { background-color: rgba(245, 158, 11, 0.1); color: var(--color-amber); border: 1px solid rgba(245, 158, 11, 0.2); }
+
+    .api-path {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .api-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .api-body {
+      background-color: #030712;
+      border-top: 1px solid var(--border-color);
+      padding: 1.25rem;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .api-body.active {
+      display: flex;
+    }
+
+    .api-trigger-btn {
+      align-self: flex-start;
+      background-color: var(--color-purple);
+      border: none;
+      color: white;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .api-trigger-btn:hover {
+      background-color: var(--color-purple-hover);
+    }
+
+    .api-response-wrapper {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: #070b15;
+      padding: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    /* Handshake visual sequence */
+    .handshake-sequence {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 1rem 0;
+    }
+
+    .handshake-step {
+      display: grid;
+      grid-template-columns: 120px 40px 120px 1fr;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      transition: background-color 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .handshake-step:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .handshake-entity {
+      padding: 6px 8px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .handshake-arrow {
+      text-align: center;
+      color: var(--color-purple);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .handshake-desc {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    .chart-container {
+      position: relative;
+      height: 220px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h2 class="brand-title">EdgeVision</h2>
+          <p class="brand-subtitle">Platform Case Study</p>
+        </div>
+      </div>
+
+      <nav style="flex: 1;">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button class="nav-btn active" onclick="switchTab('overview', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+              Overview
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-btn" onclick="switchTab('cv', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              CV Pipeline Sandbox
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-btn" onclick="switchTab('video', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7a2 2 0 0 0-2.45-1.45L16 7V5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2l4.55 1.45A2 2 0 0 0 23 17V7z"/></svg>
+              Video & Streaming
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-btn" onclick="switchTab('edge', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              Edge / Linux
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-btn" onclick="switchTab('cloud', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              Cloud & Messaging
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-btn" onclick="switchTab('code', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              Code Samples
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-btn" onclick="switchTab('results', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Field Results
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="runtime-status">
+          <div class="status-dot"></div>
+          <div>
+            <div style="font-weight: 600; color: #10B981;">Telemetry Active</div>
+            <div style="font-size: 0.65rem; color: var(--text-secondary);">RPi5 + Hailo-8L · 15 fps</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="main-content">
+      
+      <!-- TOP HEADER -->
+      <div class="top-header">
+        <div class="header-info">
+          <p style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-purple); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Full-Stack Proof of Work</p>
+          <h1>Edge AI Smart Camera Gateway</h1>
+          <p>A resilient real-time edge processing and cloud synchronization architecture developed for industrial operations.</p>
+        </div>
+        <div class="header-badge-list">
+          <span class="badge badge-purple">Raspberry Pi 5</span>
+          <span class="badge badge-teal">Hailo-8L NPU</span>
+          <span class="badge badge-green">AWS IoT mTLS</span>
+        </div>
+      </div>
+
+      <!-- TAB 1: OVERVIEW -->
+      <div id="overview" class="section-content active">
+        <!-- HUD Metrics -->
+        <div class="grid-4">
+          <div class="card metric-card" style="--accent-glow: var(--color-purple);">
+            <div class="metric-label">Inference Latency</div>
+            <div class="metric-value">38 ms</div>
+            <div class="metric-meta"><span style="color: var(--color-purple);">Hailo-8L PCIe Coprocessor</span></div>
+          </div>
+          <div class="card metric-card" style="--accent-glow: var(--color-teal);">
+            <div class="metric-label">Detection mAP@0.5</div>
+            <div class="metric-value">91.4%</div>
+            <div class="metric-meta trend-up"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Fine-tuned YOLOv8n</div>
+          </div>
+          <div class="card metric-card" style="--accent-glow: var(--color-green);">
+            <div class="metric-label">Pi 5 CPU Load</div>
+            <div class="metric-value">45.2%</div>
+            <div class="metric-meta"><span style="color: var(--color-green);">~55% Idle Headroom</span></div>
+          </div>
+          <div class="card metric-card" style="--accent-glow: var(--color-amber);">
+            <div class="metric-label">Uptime (Field Test)</div>
+            <div class="metric-value">99.7%</div>
+            <div class="metric-meta"><span style="color: var(--color-amber);">30 Days Unattended</span></div>
+          </div>
+        </div>
+
+        <!-- System Architecture Card -->
+        <div class="card">
+          <div class="card-title-bar">
+            <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> End-to-End System Pipeline</h3>
+            <span class="badge badge-purple">Data Flow</span>
+          </div>
+          <p class="description">The platform utilizes zero-copy shared memory architecture on the edge to capture, process, track, and upload events without choking the host ARM CPU, offloading core workloads to the Hailo NPU and AWS serverless cloud.</p>
+          
+          <div class="flow-diagram">
+            <div class="flow-node active">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7a2 2 0 0 0-2.45-1.45L16 7V5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2l4.55 1.45A2 2 0 0 0 23 17V7z"/></svg>
+              RTSP Capture
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/></svg>
+              SHM Ring Buffer
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+              Hailo-8L NPU (INT8)
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              ByteTrack (Kalman)
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+              Event Engine
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              AWS IoT Core (mTLS)
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Hardware Card -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg> Hardware Topology</h3>
+              <span class="badge badge-teal">Edge Device specs</span>
+            </div>
+            <div class="spec-table">
+              <div class="spec-row">
+                <span class="spec-label">Processor</span>
+                <span class="spec-value">Raspberry Pi 5 (4-core Broadcom BCM2712 @ 2.4 GHz)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Edge Accelerator</span>
+                <span class="spec-value">Hailo-8L NPU (13 TOPS PCIe Gen 2.0 interface)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Primary Camera</span>
+                <span class="spec-value">Reolink RLC-811A (8MP PoE IP Camera, H.264/H.265)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Storage Media</span>
+                <span class="spec-value">256GB NVMe SSD via Raspberry Pi M.2 HAT+</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Deployment OS</span>
+                <span class="spec-value">Ubuntu Server 22.04 LTS (Optimized custom ARM64 Kernel)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Technologies Card -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Full-Stack Integration Matrix</h3>
+              <span class="badge badge-amber">Tech Stack</span>
+            </div>
+            <p class="description" style="margin-bottom: 0.75rem;">Technologies maps across the computer vision, edge-systems, real-time video streaming, and cloud services pipeline:</p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px;">
+              <span class="badge badge-purple">Python 3.11</span>
+              <span class="badge badge-purple">HailoRT SDK</span>
+              <span class="badge badge-teal">OpenCV</span>
+              <span class="badge badge-teal">ByteTrack</span>
+              <span class="badge badge-green">FFmpeg</span>
+              <span class="badge badge-green">HLS (HTTP Live Streaming)</span>
+              <span class="badge badge-amber">systemd Watchdogs</span>
+              <span class="badge badge-amber">WireGuard VPN</span>
+              <span class="badge badge-coral">AWS IoT Core</span>
+              <span class="badge badge-coral">Mutual TLS (mTLS)</span>
+              <span class="badge badge-coral">FastAPI</span>
+              <span class="badge badge-coral">DynamoDB + S3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: CV PIPELINE & SANDBOX -->
+      <div id="cv" class="section-content">
+        <div class="grid-3-2">
+          <!-- Interactive Canvas Simulator -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Live CV Pipeline Simulator & Zone Editor</h3>
+              <span class="badge badge-purple">Interactive Sandbox</span>
+            </div>
+            <p class="description">Test the rule-based spatial geometry engine. Click and drag the polygon corner vertices to edit the detection zones in real-time, or toggle tracking targets.</p>
+            
+            <div class="canvas-container">
+              <canvas id="cvSimulator"></canvas>
+              
+              <div class="canvas-hud">
+                <div class="hud-left">
+                  <div class="status-dot"></div>
+                  <span>RTSP STREAM (1080p @ 15fps)</span>
+                </div>
+                <div class="hud-right">
+                  <div>NPU INFER: <span id="telemetryInfer">38.2 ms</span></div>
+                  <div>CPU LOAD: <span id="telemetryCpu">14.1%</span></div>
+                  <div>TEMP: 49.3°C</div>
+                </div>
+              </div>
+              
+              <div class="canvas-controls">
+                <div class="canvas-btn-group">
+                  <button class="canvas-btn active" id="btnZoneLoading" onclick="toggleSimZone('loading')">
+                    <span style="color:#a78bfa">●</span> Loading Zone
+                  </button>
+                  <button class="canvas-btn active" id="btnZoneRestricted" onclick="toggleSimZone('restricted')">
+                    <span style="color:#ef4444">●</span> Restricted Zone
+                  </button>
+                  <button class="canvas-btn active" id="btnLineCross" onclick="toggleSimZone('line')">
+                    <span style="color:#f59e0b">▬</span> Line Crossing
+                  </button>
+                </div>
+                <button class="canvas-btn" onclick="resetSimZones()">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg> Reset Zones
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulator Telemetry & Event Logger -->
+          <div class="sim-sidebar">
+            <div class="sim-metrics">
+              <div class="sim-stat-box">
+                <div class="sim-stat-num" id="statZoneDwell">0s</div>
+                <div class="sim-stat-lbl">Max Loading Dwell</div>
+              </div>
+              <div class="sim-stat-box">
+                <div class="sim-stat-num" id="statCrossings">0</div>
+                <div class="sim-stat-lbl">Line Cross Count</div>
+              </div>
+            </div>
+            
+            <div class="event-logger">
+              <div class="log-title">
+                <span>Event Log (AWS IoT Dispatch Queue)</span>
+                <span style="color:var(--text-muted)">QoS 1</span>
+              </div>
+              <div id="simLogList" style="display:flex; flex-direction:column; gap:6px;">
+                <!-- Dynamically generated logs -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-3-2">
+          <!-- Fine-Tuning & Quantization -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="14.31" y1="8" x2="20.05" y2="17.94"/><line x1="9.69" y1="8" x2="21.17" y2="8"/><line x1="7.38" y1="12" x2="13.12" y2="2.06"/><line x1="9.69" y1="16" x2="3.95" y2="6.06"/><line x1="14.31" y1="16" x2="2.83" y2="16"/><line x1="16.62" y1="12" x2="10.88" y2="21.94"/></svg> CV Quantization & Compilation Pipeline</h3>
+              <span class="badge badge-teal">YOLOv8 to NPU</span>
+            </div>
+            <p class="description">To run object detection under 40ms on the edge, the fine-tuned YOLOv8n network undergoes strict post-training quantization (PTQ) and model compilation:</p>
+            <ul class="bullet-list">
+              <li><strong>Dataset Fine-tuning:</strong> Trained on 4,200 custom labeled images (640x640 resolution) representing the deployment warehouse corridor, using mosaic augmentation and mixed-precision optimization.</li>
+              <li><strong>Quantization to INT8:</strong> Performed with Hailo Model Zoo tools using a representative calibration subset of 300 frames. This compresses model weight precision from FP32 to INT8, resulting in a minor 0.9% drop in mAP.</li>
+              <li><strong>HEF Compilation:</strong> The compiled HEF (Hailo Executable Format) specifies optimized register-level data routings tailored specifically to the physical internal processor structure of the Hailo-8L NPU.</li>
+            </ul>
+          </div>
+
+          <!-- Tracking & Geometry Theory -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 22 12 17 22 22 12 2"/></svg> Ray-Casting & Kalman Tracking</h3>
+              <span class="badge badge-amber">Algorithmic Base</span>
+            </div>
+            <p class="description">The tracking system runs two mathematically optimized algorithms directly on the Pi 5's ARM CPU:</p>
+            <div class="spec-table">
+              <div class="spec-row" style="flex-direction:column; align-items:flex-start; gap:4px;">
+                <span class="spec-label" style="font-weight:600; color:var(--text-primary);">ByteTrack (Stateful Association)</span>
+                <span style="color:var(--text-secondary); font-size:0.8rem;">Utilizes a Kalman Filter to model target trajectory motion velocity, matching low-score detections in the second step to handle brief physical occlusion behind warehouse pillars.</span>
+              </div>
+              <div class="spec-row" style="flex-direction:column; align-items:flex-start; gap:4px;">
+                <span class="spec-label" style="font-weight:600; color:var(--text-primary);">Ray-Casting Polygon Intersection</span>
+                <span style="color:var(--text-secondary); font-size:0.8rem;">Determines zone containment by casting a horizontal ray from the object's bottom-center coordinate. Checking coordinate crosses against polygon borders runs in O(N) where N is the number of vertices.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: VIDEO & STREAMING -->
+      <div id="video" class="section-content">
+        <div class="grid-3-2">
+          <!-- Shared Memory buffer description -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg> Zero-Copy Shared-Memory Ring Buffer</h3>
+              <span class="badge badge-purple">Zero-Copy Engine</span>
+            </div>
+            <p class="description">Standard Python subprocess pipelines face major execution bottlenecks due to inter-process communication serialization. To fix this, our pipeline leverages POSIX shared-memory blocks (`multiprocessing.shared_memory`). Decoded raw camera pixel frames write directly to a shared RAM circular buffer, allowing concurrent zero-copy access by the worker thread.</p>
+            
+            <div class="ring-container">
+              <div class="ring-wrapper">
+                <div class="ring-slot" id="slot0" style="top: 10px; left: 106px;">0</div>
+                <div class="ring-slot" id="slot1" style="top: 38px; right: 38px;">1</div>
+                <div class="ring-slot" id="slot2" style="top: 106px; right: 10px;">2</div>
+                <div class="ring-slot" id="slot3" style="bottom: 38px; right: 38px;">3</div>
+                <div class="ring-slot" id="slot4" style="bottom: 10px; left: 106px;">4</div>
+                <div class="ring-slot" id="slot5" style="bottom: 38px; left: 38px;">5</div>
+                <div class="ring-slot" id="slot6" style="top: 106px; left: 10px;">6</div>
+                <div class="ring-slot" id="slot7" style="top: 38px; left: 38px;">7</div>
+                
+                <div class="ring-pointer pointer-write" id="ptrWrite">Write</div>
+                <div class="ring-pointer pointer-read" id="ptrRead">Read</div>
+                
+                <div class="ring-center">
+                  <div class="ring-center-title">SHM BUFFER</div>
+                  <div class="ring-center-value">6.2 MB/frame</div>
+                  <div style="font-size:0.6rem; color:var(--color-teal); font-family:var(--font-mono); margin-top:2px;">1920x1080 YUV</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Processing pipelines -->
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div class="card-title-bar">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Recording & Clip Trimming</h3>
+                <span class="badge badge-teal">Local Pipeline</span>
+              </div>
+              <p class="description">Instead of active video encoding on the constrained Pi 5 CPU, the platform writes the raw H.264 stream into continuous rolling 5-minute segments on the local NVMe drive.</p>
+              <ul class="bullet-list" style="margin-bottom: 1.5rem;">
+                <li><strong>Stream copy clip extraction:</strong> When a CV zone event is triggered, a background worker uses FFmpeg stream-copy: `ffmpeg -ss -to -c copy` to slice the ±15-second block around the timestamp. Slicing completes in under 1 second since it doesn't execute re-encoding.</li>
+                <li><strong>Network isolation queues:</strong> Raw sliced clips are queued in a persistent SQLite buffer database, ensuring video files are preserved during network blackouts.</li>
+              </ul>
+            </div>
+            
+            <div style="border-top:1px solid var(--border-color); padding-top: 1.25rem;">
+              <h4 style="font-size:0.875rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:var(--color-teal);"><path d="M18 10h-1.25A3.48 3.48 0 0 0 14 6.75V5.5c0-.825-.675-1.5-1.5-1.5h-1c-.825 0-1.5.675-1.5 1.5v1.25A3.48 3.48 0 0 0 6.75 10H5.5c-.825 0-1.5.675-1.5 1.5v1c0 .825.675 1.5 1.5 1.5h1.25A3.48 3.48 0 0 0 10 17.25V18.5c0 .825.675 1.5 1.5 1.5h1c.825 0 1.5-.675 1.5-1.5v-1.25a3.48 3.48 0 0 0 3.25-3.25H18.5c.825 0 1.5-.675 1.5-1.5v-1c0-.825-.675-1.5-1.5-1.5z"/></svg>
+                Cloud Transcoding Offloader
+              </h4>
+              <p style="font-size:0.8rem; color:var(--text-secondary);">Clips are uploaded raw to Amazon S3. An AWS Lambda event trigger spins up FFmpeg inside a serverless container to transcode the video to optimized H.264/AAC MP4 & HLS (.m3u8) streams. This offloads compute-heavy transcoding entirely from the edge device.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: EDGE / LINUX -->
+      <div id="edge" class="section-content">
+        <div class="grid-2">
+          <!-- Linux Hardening -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> systemd Hardening & Watchdogs</h3>
+              <span class="badge badge-purple">Security Hardening</span>
+            </div>
+            <p class="description">The application runtime is configured as a system daemon that leverages systemd's sandboxing mechanics. This prevents host compromise even if the Python process is breached:</p>
+            <ul class="bullet-list" style="margin-bottom: 1.25rem;">
+              <li><strong>Hardware Watchdog:</strong> Configured with `WatchdogSec=30`. The Python event loop is required to send heartbeats (`systemd.daemon.notify`) at regular intervals. Failure to heartbeat within the window triggers a hard system daemon restart.</li>
+              <li><strong>Sandbox Controls:</strong> Restricts operations using kernel sandboxing options: `ProtectSystem=strict` makes the root OS filesystem read-only, `ProtectHome=true` isolates user home directories, and `PrivateDevices=false` selectively exposes only specific system devices (like `/dev/hailo0` and PCIe lanes).</li>
+            </ul>
+          </div>
+
+          <!-- Edge Provisioning & Mesh -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Automated Provisioning & WireGuard</h3>
+              <span class="badge badge-teal">Operations Management</span>
+            </div>
+            <p class="description">Managing multiple edge cameras requires reproducible deployment and secure remote maintenance. The platform relies on a dual-layer remote orchestration model:</p>
+            <div class="spec-table">
+              <div class="spec-row">
+                <span class="spec-label">Ansible Playbook Deployment</span>
+                <span class="spec-value" style="font-size:0.8rem; text-align:right;">Automates system setup: compiles the kernel driver, mounts nvme storage partitions, configures Python dependencies, and deploys systemd units.</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">WireGuard Overlay Mesh Network</span>
+                <span class="spec-value" style="font-size:0.8rem; text-align:right;">Establishes a split-tunnel encrypted link directly to a central cloud server, bypassing NAT and firewalls to allow secure SSH management access.</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Automated Logging & Metrics</span>
+                <span class="spec-value" style="font-size:0.8rem; text-align:right;">System journal logs are continuously streamed to AWS CloudWatch via a background Vector agent, enabling centralized monitoring.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: CLOUD & MESSAGING -->
+      <div id="cloud" class="section-content">
+        <div class="grid-3-2">
+          <!-- API Explorer -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.25A3.48 3.48 0 0 0 14 6.75V5.5c0-.825-.675-1.5-1.5-1.5h-1c-.825 0-1.5.675-1.5 1.5v1.25A3.48 3.48 0 0 0 6.75 10H5.5c-.825 0-1.5.675-1.5 1.5v1c0 .825.675 1.5 1.5 1.5h1.25A3.48 3.48 0 0 0 10 17.25V18.5c0 .825.675 1.5 1.5 1.5h1c.825 0 1.5-.675 1.5-1.5v-1.25a3.48 3.48 0 0 0 3.25-3.25H18.5c.825 0 1.5-.675 1.5-1.5v-1c0-.825-.675-1.5-1.5-1.5z"/></svg> FastAPI Cloud Backend Sandbox</h3>
+              <span class="badge badge-purple">Interactive API API</span>
+            </div>
+            <p class="description">Click an endpoint path below to test and view mock server responses returned from the FastAPI backend services running on ECS:</p>
+            
+            <div class="api-explorer">
+              
+              <!-- GET /devices -->
+              <div class="api-endpoint">
+                <div class="api-header" onclick="toggleApiBody('apiGetDevices')">
+                  <div class="api-method-path">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/v1/devices</span>
+                  </div>
+                  <span class="api-desc">Fetch registered smart cameras</span>
+                </div>
+                <div class="api-body" id="apiGetDevices">
+                  <button class="api-trigger-btn" onclick="triggerMockApi('devices')">Execute Request</button>
+                  <div class="api-response-wrapper"><pre><code id="respDevices">// Response will render here</code></pre></div>
+                </div>
+              </div>
+
+              <!-- GET /events -->
+              <div class="api-endpoint">
+                <div class="api-header" onclick="toggleApiBody('apiGetEvents')">
+                  <div class="api-method-path">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/v1/events</span>
+                  </div>
+                  <span class="api-desc">Query event log database (DynamoDB query)</span>
+                </div>
+                <div class="api-body" id="apiGetEvents">
+                  <button class="api-trigger-btn" onclick="triggerMockApi('events')">Execute Request</button>
+                  <div class="api-response-wrapper"><pre><code id="respEvents">// Response will render here</code></pre></div>
+                </div>
+              </div>
+
+              <!-- POST /config -->
+              <div class="api-endpoint">
+                <div class="api-header" onclick="toggleApiBody('apiPostConfig')">
+                  <div class="api-method-path">
+                    <span class="api-method post">POST</span>
+                    <span class="api-path">/api/v1/devices/{id}/config</span>
+                  </div>
+                  <span class="api-desc">Push updated zone coordinates to edge</span>
+                </div>
+                <div class="api-body" id="apiPostConfig">
+                  <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-secondary); margin-bottom:8px;">
+                    Body Payload: { "zones": { "loading": [[100,200], [300,200], [250,400]] } }
+                  </div>
+                  <button class="api-trigger-btn" onclick="triggerMockApi('config')">Execute Push</button>
+                  <div class="api-response-wrapper"><pre><code id="respConfig">// Response will render here</code></pre></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Mutual TLS handshake visualization -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> AWS IoT Mutual TLS (mTLS) Handshake</h3>
+              <span class="badge badge-teal">Security Handshake</span>
+            </div>
+            <p class="description">Edge devices authenticate via mutual TLS 1.3. Secure client certificates verify identity before data is processed by the AWS IoT Core endpoint.</p>
+            
+            <div class="handshake-sequence">
+              <div class="handshake-step">
+                <div class="handshake-entity">Edge Camera</div>
+                <div class="handshake-arrow">→</div>
+                <div class="handshake-entity">AWS IoT</div>
+                <div class="handshake-desc">TCP Handshake + ClientHello (TLS 1.3)</div>
+              </div>
+              <div class="handshake-step">
+                <div class="handshake-entity">Edge Camera</div>
+                <div class="handshake-arrow">←</div>
+                <div class="handshake-entity">AWS IoT</div>
+                <div class="handshake-desc">Server Certificate & Client Cert Request</div>
+              </div>
+              <div class="handshake-step">
+                <div class="handshake-entity">Edge Camera</div>
+                <div class="handshake-arrow">→</div>
+                <div class="handshake-entity">AWS IoT</div>
+                <div class="handshake-desc">Sends X.509 Client Cert + CertificateVerify</div>
+              </div>
+              <div class="handshake-step">
+                <div class="handshake-entity">Edge Camera</div>
+                <div class="handshake-arrow">⇆</div>
+                <div class="handshake-entity">AWS IoT</div>
+                <div class="handshake-desc">MQTT Session Handshake Completed (Port 8883)</div>
+              </div>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">This handshake guarantees that only provisioned edge hardware can access backend message brokers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 6: CODE HUB -->
+      <div id="code" class="section-content">
+        <div class="card">
+          <div class="card-title-bar">
+            <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Interactive Repository Explorer</h3>
+            <span class="badge badge-purple">Edge & Cloud Codebase</span>
+          </div>
+          
+          <div class="code-hub">
+            <div class="code-sidebar">
+              <div class="code-sidebar-title">Edge Services</div>
+              <button class="code-tab-btn active" onclick="loadCodeSample('cv_worker')">cv_worker.py</button>
+              <button class="code-tab-btn" onclick="loadCodeSample('event_engine')">event_engine.py</button>
+              <button class="code-tab-btn" onclick="loadCodeSample('capture')">capture.py</button>
+              <button class="code-tab-btn" onclick="loadCodeSample('mqtt_publisher')">mqtt_publisher.py</button>
+              <button class="code-tab-btn" onclick="loadCodeSample('systemd')">edgevision.service</button>
+              <div class="code-sidebar-title" style="margin-top:10px;">Cloud Backend</div>
+              <button class="code-tab-btn" onclick="loadCodeSample('lambda')">lambda_transcode.py</button>
+            </div>
+            
+            <div class="code-display">
+              <div class="code-header-bar">
+                <span class="code-file-name" id="codeFileName">src/cv_worker.py</span>
+                <button class="copy-btn" onclick="copyCodeContent()">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy
+                </button>
+              </div>
+              <div class="code-pre-wrapper">
+                <pre><code id="codeBlock">Loading...</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 7: FIELD RESULTS -->
+      <div id="results" class="section-content">
+        <div class="grid-3-2">
+          <!-- Metrics Graphs -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Performance Telemetry & Hardware Efficiency</h3>
+              <span class="badge badge-teal">Hardware Benchmarks</span>
+            </div>
+            <p class="description">Telemetry comparisons between traditional CPU-bound host inference and optimized Hailo NPU offloading during continuous execution on the Raspberry Pi 5:</p>
+            
+            <div class="grid-2">
+              <div>
+                <h4 style="font-size:0.875rem; text-align:center; margin-bottom:8px; color:var(--text-secondary);">Host Pi 5 CPU Load (%)</h4>
+                <div class="chart-container">
+                  <canvas id="chartCpuLoad"></canvas>
+                </div>
+              </div>
+              <div>
+                <h4 style="font-size:0.875rem; text-align:center; margin-bottom:8px; color:var(--text-secondary);">Inference Latency Profile (ms)</h4>
+                <div class="chart-container">
+                  <canvas id="chartLatency"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 30-Day Field Test Validation matrix -->
+          <div class="card">
+            <div class="card-title-bar">
+              <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Field Validation Metrics (30-Day Run)</h3>
+              <span class="badge badge-amber">Field Trial</span>
+            </div>
+            <p class="description">Validated metrics recorded during unattended continuous warehouse testing:</p>
+            
+            <div class="spec-table">
+              <div class="spec-row">
+                <span class="spec-label">System Uptime</span>
+                <span class="spec-value" style="color:var(--color-green); font-weight:600;">99.72%</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">RTSP Recovery Rate</span>
+                <span class="spec-value">100% (21/21 dropouts recovered)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Average Recovery Latency</span>
+                <span class="spec-value">&lt; 4.8 seconds</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">MQTT Message Delivery</span>
+                <span class="spec-value">99.98% (QoS 1 retries handled)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">E2E Event Delivery Latency</span>
+                <span class="spec-value">22.4 seconds (Trigger to dashboard UI)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">F-1 Detection Accuracy Score</span>
+                <span class="spec-value">0.893 (Custom test dataset)</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-label">Power Consumption</span>
+                <span class="spec-value">7.4 Watts average (9.2W Peak NPU Load)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title-bar">
+            <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Reliability & Metrics Tracking Architecture</h3>
+            <span class="badge badge-green">Uptime Engine</span>
+          </div>
+          <p class="description">Continuous telemetry profiling ensures early detection of resource constraints or algorithmic performance degradation. Metrics were tracked at every deployment stage:</p>
+          <ul class="bullet-list">
+            <li><strong>Automated Regression Testing:</strong> Each software release compiles models inside a containerized ARM simulator, comparing target mAP scores against a golden evaluation dataset to block regression.</li>
+            <li><strong>Production Performance Audits:</strong> Host device telemetry is monitored via a local Prometheus node. If RAM utilization exceeds 2.5 GB, an alert fires to notify cloud operators.</li>
+          </ul>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Tab switching system
+    function switchTab(tabId, button) {
+      // Hide all tabs
+      document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.remove('active');
+      });
+      // Deactivate all navigation items
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Activate target tab
+      document.getElementById(tabId).classList.add('active');
+      button.classList.add('active');
+
+      // Execute tab-specific code initializations
+      if (tabId === 'cv') {
+        initCvSimulator();
+      } else if (tabId === 'results') {
+        initResultsCharts();
+      }
+    }
+
+    // --- MOCK API EXPLORER LOGIC ---
+    function toggleApiBody(bodyId) {
+      const el = document.getElementById(bodyId);
+      const isVisible = el.style.display === 'flex';
+      el.style.display = isVisible ? 'none' : 'flex';
+    }
+
+    const mockResponses = {
+      devices: [
+        {
+          "device_id": "cam-wh-east-04",
+          "status": "ONLINE",
+          "ip_address": "10.8.0.14",
+          "fw_version": "v1.4.2",
+          "npu_temp_c": 49.3,
+          "uptime_sec": 2643800,
+          "active_zones": ["LoadingZone_A", "RestrictedZone_GateB"]
+        },
+        {
+          "device_id": "cam-wh-dock-01",
+          "status": "ONLINE",
+          "ip_address": "10.8.0.22",
+          "fw_version": "v1.4.2",
+          "npu_temp_c": 47.1,
+          "uptime_sec": 1948500,
+          "active_zones": ["DockZone_Entry"]
+        }
+      ],
+      events: [
+        {
+          "event_id": "evt_9f27a4d1b82",
+          "device_id": "cam-wh-east-04",
+          "timestamp": "2026-06-09T17:42:01.082Z",
+          "event_type": "RESTRICTED_ZONE_VIOLATION",
+          "track_id": 104,
+          "confidence": 0.94,
+          "clip_s3_url": "https://edgevision-prod-clips.s3.amazonaws.com/clips/cam-wh-east-04/20260609_174201_raw.mp4?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Expires=1781030521&Signature=x91028sA%3D",
+          "thumbnail_s3_url": "https://edgevision-prod-clips.s3.amazonaws.com/thumbnails/evt_9f27a4d1b82.jpg"
+        },
+        {
+          "event_id": "evt_8d11c0f4f91",
+          "device_id": "cam-wh-east-04",
+          "timestamp": "2026-06-09T17:41:24.412Z",
+          "event_type": "LOADING_ZONE_DWELL_ALERT",
+          "dwell_time_sec": 42.5,
+          "track_id": 98,
+          "confidence": 0.88,
+          "clip_s3_url": "https://edgevision-prod-clips.s3.amazonaws.com/clips/cam-wh-east-04/20260609_174124_raw.mp4?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Expires=1781030521&Signature=a98s78x2B%3D",
+          "thumbnail_s3_url": "https://edgevision-prod-clips.s3.amazonaws.com/thumbnails/evt_8d11c0f4f91.jpg"
+        }
+      ],
+      config: {
+        "status": "SUCCESS",
+        "device_id": "cam-wh-east-04",
+        "published_topic": "devices/cam-wh-east-04/config",
+        "qos": 1,
+        "message_id": 48102,
+        "payload": {
+          "ts": "2026-06-09T17:49:15.112Z",
+          "version": 14,
+          "zones": {
+            "loading": [[100,200], [300,200], [250,400]]
+          }
+        }
+      }
+    };
+
+    async function triggerMockApi(endpointType) {
+      const codeElement = document.getElementById(endpointType === 'devices' ? 'respDevices' : (endpointType === 'events' ? 'respEvents' : 'respConfig'));
+      codeElement.textContent = "Contacting live FastAPI endpoint gateway...";
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const liveApiBase = urlParams.get('api');
+      
+      if (liveApiBase) {
+        let path = '/api/v1/devices';
+        let method = 'GET';
+        let options = { method };
+        
+        if (endpointType === 'events') {
+          path = '/api/v1/events';
+        } else if (endpointType === 'config') {
+          path = '/api/v1/devices/cam-wh-east-04/config';
+          method = 'POST';
+          options = {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              version: 14,
+              zones: {
+                loading: [[120.0, 60.0], [280.0, 60.0], [240.0, 200.0], [80.0, 200.0]],
+                restricted: [[360.0, 100.0], [520.0, 100.0], [500.0, 260.0], [320.0, 260.0]]
+              }
+            })
+          };
+        }
+        
+        try {
+          const response = await fetch(`${liveApiBase}${path}`, options);
+          const data = await response.json();
+          codeElement.innerHTML = hljsJson(data);
+          return;
+        } catch (err) {
+          console.error("Live API call failed, falling back to mock:", err);
+          codeElement.textContent = `Error calling live API (${err.message}). Falling back to local mock data...`;
+        }
+      }
+      
+      setTimeout(() => {
+        codeElement.innerHTML = hljsJson(mockResponses[endpointType]);
+      }, 600);
+    }
+
+    function hljsJson(obj) {
+      const json = JSON.stringify(obj, null, 2);
+      return json
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
+          var cls = 'number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'keyword';
+            } else {
+              cls = 'string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'builtin';
+          } else if (/null/.test(match)) {
+            cls = 'comment';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+
+    // --- REPOSITORY CODE LOADER ---
+    const codeRepository = {
+      cv_worker: `\
+# src/cv_worker.py - Edge Inference Worker
+import cv2
+import numpy as np
+from hailo_platform import HEF, VDevice, HailoStreamInterface
+from trackers.bytetrack import BYTETracker
+from core.event_engine import EventEngine
+
+class CVWorker:
+    """
+    Main thread runner responsible for fetching frames from the shared-memory
+    ring buffer, performing hardware inference on the Hailo-8L NPU,
+    updating the stateful tracker, and feeding coordinates to the event engine.
+    """
+    def __init__(self, config):
+        self.config = config
+        
+        # Initialize Hailo VDevice interface
+        self.target_device = VDevice()
+        self.hef = HEF(self.config.HEF_PATH)
+        
+        # Compile device inference configuration mapping
+        self.infer_config = self.target_device.create_infer_model(self.hef)
+        self.infer_config.set_batch_size(1)
+        self.runner = self.target_device.create_configured_infer_model(self.infer_config)
+        
+        # Initialize ByteTracker with Kalman parameters
+        self.tracker = BYTETracker(
+            track_thresh=0.45,
+            track_buffer=self.config.TRACK_BUFFER_SIZE,
+            match_thresh=0.6
+        )
+        
+        # Initialize Spatial-Temporal Event Engine
+        self.event_engine = EventEngine(self.config.ZONES_CONFIG)
+
+    def process_buffer_frame(self, frame_buffer: np.ndarray, timestamp: float):
+        """
+        Processes a raw frame read from the circular Shared Memory buffer.
+        """
+        # Crop & resize to model input specification (640x640)
+        h, w, c = frame_buffer.shape
+        resized_frame = cv2.resize(frame_buffer, (640, 640))
+        
+        # Perform zero-copy hardware inference via the Hailo-8L PCIe bus
+        # This blocks the thread for ~38ms while the INT8 quantization runs
+        raw_detections = self.runner.infer(resized_frame)
+        
+        # Parse output buffers into normalized bounding boxes & scores
+        parsed_detections = self._post_process(raw_detections, (h, w))
+        
+        # Update stateful tracker (handles occlusion & re-identification)
+        active_tracks = self.tracker.update(
+            parsed_detections, 
+            img_info=frame_buffer.shape, 
+            img_size=frame_buffer.shape[:2]
+        )
+        
+        # Query geometry event engine for breaches (crossings / loitering)
+        triggered_events = self.event_engine.update(active_tracks, timestamp)
+        self.event_engine = EventEngine(config.ZONES_CONFIG)
+        self.tracker = SimpleByteTracker(config.TRACK_BUFFER_SIZE)
+        self.hardware_active = False
+
+    def process_frame(self, frame: np.ndarray, timestamp: float):
+        h, w, c = frame.shape
+        # CPU Fallback Contour tracking / inference simulation
+        tracks = self._simulate_cv_tracking(w, h)
+        triggered_events = self.event_engine.update(tracks, timestamp)
+        return tracks, triggered_events
+`,
+      event_engine: `\
+# src/event_engine.py - Geometry & Alert Rules
+import time
+from typing import Dict, List, Tuple, Any
+
+class EventEngine:
+    """
+    Rule-based spatial event engine. Calculates boundary crossings
+    and polygon containment using lightweight CPU geometries.
+    """
+    def __init__(self, zones_config):
+        self.polygons = zones_config.polygons
+        self.lines = zones_config.lines
+        self.dwell_limits = zones_config.dwell_limits
+        self.dwell_states = {}
+        self.history_states = {}
+
+    def update(self, tracks, current_timestamp):
+        triggered_alerts = []
+        active_ids = set()
+        
+        for track in tracks:
+            track_id = track.track_id
+            active_ids.add(track_id)
+            tlbr = track.tlbr
+            centroid = ((tlbr[1] + tlbr[3])/2.0, tlbr[2])
+            
+            if track_id not in self.history_states:
+                self.history_states[track_id] = [centroid]
+            else:
+                self.history_states[track_id].append(centroid)
+                if len(self.history_states[track_id]) > 5:
+                    self.history_states[track_id].pop(0)
+            
+            # 1. Evaluate Polygon Dwell Zones
+            for zone_name, polygon in self.polygons.items():
+                is_inside = self.point_in_polygon(centroid, polygon)
+                
+                if is_inside:
+                    if track_id not in self.dwell_states:
+                        self.dwell_states[track_id] = current_timestamp
+                    else:
+                        dwell_duration = current_timestamp - self.dwell_states[track_id]
+                        if dwell_duration > self.dwell_limits.get(zone_name, 0.0):
+                            triggered_alerts.append({
+                                "type": f"DWELL_LIMIT_EXCEEDED_{zone_name.upper()}",
+                                "track_id": track_id,
+                                "dwell_time": dwell_duration
+                            })
+                else:
+                    if track_id in self.dwell_states:
+                        self.dwell_states.pop(track_id, None)
+
+            # 2. Evaluate Line Crossing Rules
+            if len(self.history_states[track_id]) >= 2:
+                last_pos = self.history_states[track_id][-2]
+                curr_pos = self.history_states[track_id][-1]
+                
+                for line_name, line_seg in self.lines.items():
+                    if len(line_seg) >= 2:
+                        p1, p2 = line_seg[0], line_seg[1]
+                        if self.check_line_intersection(last_pos, curr_pos, p1, p2):
+                            triggered_alerts.append({
+                                "type": f"LINE_CROSSING_{line_name.upper()}",
+                                "track_id": track_id
+                            })
+                            
+        return triggered_alerts
+
+    @staticmethod
+    def point_in_polygon(point, polygon):
+        x, y = point
+        inside = False
+        n = len(polygon)
+        p1x, p1y = polygon[0]
+        for i in range(n + 1):
+            p2x, p2y = polygon[i % n]
+            if y > min(p1y, p2y):
+                if y <= max(p1y, p2y):
+                    if x <= max(p1x, p2x):
+                        if p1y != p2y:
+                            xints = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
+                        if p1x == p2x or x <= xints:
+                            inside = not inside
+            p1x, p1y = p2x, p2y
+        return inside
+
+    @staticmethod
+    def check_line_intersection(p1, p2, q1, q2):
+        def ccw(A, B, C):
+            return (C[1]-A[1]) * (B[0]-A[0]) > (B[1]-A[1]) * (C[0]-A[0])
+        return ccw(p1, q1, q2) != ccw(p2, q1, q2) and ccw(p1, p2, q1) != ccw(p1, p2, q2)
+`,
+      capture: `\
+# src/capture.py - Resilient Frame Ingestion
+import subprocess
+import threading
+import time
+import numpy as np
+from multiprocessing import shared_memory
+
+class RTSPCapture:
+    def __init__(self, rtsp_url, shm_name, frame_shape=(1080, 1920, 3)):
+        self.rtsp_url = rtsp_url
+        self.shm_name = shm_name
+        self.shape = frame_shape
+        self.frame_size = np.prod(frame_shape)
+        
+        self.shm = shared_memory.SharedMemory(name=shm_name)
+        self.shared_array = np.ndarray(self.shape, dtype=np.uint8, buffer=self.shm.buf)
+        self.process = None
+        self.running = True
+        self.start_worker_thread()
+
+    def start_worker_thread(self):
+        def loop():
+            while self.running:
+                ffmpeg_cmd = [
+                    "ffmpeg", "-rtsp_transport", "tcp",
+                    "-i", self.rtsp_url, "-f", "rawvideo",
+                    "-pix_fmt", "bgr24", "-vf", "fps=15",
+                    "-an", "pipe:1"
+                ]
+                self.process = subprocess.Popen(ffmpeg_cmd, stdout=subprocess.PIPE)
+                try:
+                    self._read_stream()
+                except Exception:
+                    self.process.kill()
+                    time.sleep(3)
+        threading.Thread(target=loop, daemon=True).start()
+
+    def _read_stream(self):
+        while self.running:
+            chunk = self.process.stdout.read(self.frame_size)
+            if not chunk or len(chunk) != self.frame_size:
+                raise IOError("Incomplete frame read.")
+            frame = np.frombuffer(chunk, dtype=np.uint8).reshape(self.shape)
+            np.copyto(self.shared_array, frame)
+`,
+      mqtt_publisher: `\
+# src/mqtt_publisher.py - AWS IoT Message Gateway
+import ssl
+import json
+import sqlite3
+import paho.mqtt.client as mqtt
+
+class EventPublisher:
+    def __init__(self, client_id, config):
+        self.topic = f"devices/{client_id}/events"
+        self.db_path = config.SQLITE_DB_PATH
+        self._init_sqlite_queue()
+        
+        self.client = mqtt.Client(client_id=client_id, protocol=mqtt.MQTTv5)
+        self.client.on_connect = self._on_connect
+        
+        context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+        context.load_verify_locations(cafile=config.CA_FILE)
+        context.load_cert_chain(certfile=config.CERT_FILE, keyfile=config.KEY_FILE)
+        self.client.tls_set_context(context)
+        self.client.connect(config.ENDPOINT, 8883)
+        self.client.loop_start()
+
+    def _init_sqlite_queue(self):
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS event_queue (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    payload TEXT NOT NULL
+                )
+            """)
+
+    def _on_connect(self, client, userdata, flags, rc, properties=None):
+        if rc == 0:
+            self.flush_queue()
+
+    def publish_event(self, event_data):
+        payload = json.dumps(event_data)
+        if not self.client.is_connected():
+            with sqlite3.connect(self.db_path) as conn:
+                conn.execute("INSERT INTO event_queue (payload) VALUES (?)", (payload,))
+            return
+        self.client.publish(self.topic, payload, qos=1)
+`,
+      systemd: `\
+# /etc/systemd/system/edgevision.service - Hardened systemd unit
+[Unit]
+Description=EdgeVision Edge Computer Vision Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vision
+WorkingDirectory=/opt/edgevision
+ExecStart=/opt/edgevision/venv/bin/python src/main.py
+Restart=always
+RestartSec=5
+WatchdogSec=30
+NotifyAccess=main
+
+# OS Sandboxing Security Policies
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+DeviceAllow=/dev/hailo0 rw
+DevicePolicy=closed
+`,
+      lambda: `\
+# cloud/transcoder_lambda.py - Serverless Transcoding Pipeline
+import os
+import subprocess
+import boto3
+import urllib.parse
+
+s3_client = boto3.client('s3')
+
+def lambda_handler(event, context):
+    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'])
+    
+    temp_input = f"/tmp/input_{os.path.basename(key)}"
+    temp_output_dir = "/tmp/hls_out"
+    os.makedirs(temp_output_dir, exist_ok=True)
+    
+    s3_client.download_file(bucket_name, key, temp_input)
+    
+    hls_output_path = os.path.join(temp_output_dir, "stream.m3u8")
+    ffmpeg_cmd = [
+        "/opt/ffmpeg/ffmpeg", "-y", "-i", temp_input,
+        "-c:v", "libx264", "-c:a", "aac",
+        "-f", "hls", "-hls_time", "4",
+        hls_output_path
+    ]
+    subprocess.run(ffmpeg_cmd, check=True)
+    
+    for filename in os.listdir(temp_output_dir):
+        s3_client.upload_file(
+            os.path.join(temp_output_dir, filename),
+            bucket_name,
+            f"streams/{os.path.splitext(key)[0]}/{filename}"
+        )
+    return {'status': 'COMPLETED'}
+`
+    };
+
+    function loadCodeSample(sampleKey) {
+      document.querySelectorAll('.code-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      const fileNames = {
+        cv_worker: 'src/cv_worker.py',
+        event_engine: 'src/event_engine.py',
+        capture: 'src/capture.py',
+        mqtt_publisher: 'src/mqtt_publisher.py',
+        systemd: 'deployment/edgevision.service',
+        lambda: 'cloud/transcoder_lambda.py'
+      };
+      
+      document.getElementById('codeFileName').textContent = fileNames[sampleKey];
+      
+      const rawCode = codeRepository[sampleKey];
+      document.getElementById('codeBlock').innerHTML = syntaxHighlightPython(rawCode);
+    }
+
+    function syntaxHighlightPython(code) {
+      // Escape HTML
+      let html = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      
+      // Keywords
+      html = html.replace(/\b(def|class|import|from|self|return|if|else|for|while|try|except|as|pass|in|not|is|and|or)\b/g, '<span class="keyword">$1</span>');
+      // Builtins
+      html = html.replace(/\b(print|len|range|str|int|float|dict|list|tuple|set|np|cv2|VDevice|HEF|BYTETracker|EventEngine|SharedMemory|Client)\b/g, '<span class="builtin">$1</span>');
+      // Strings
+      html = html.replace(/("(.*?)"|'(.*?)')/g, '<span class="string">$1</span>');
+      // Comments
+      html = html.replace(/(#.*?$)/gm, '<span class="comment">$1</span>');
+      // Numbers
+      html = html.replace(/\b(\d+(\.\d+)?)\b/g, '<span class="number">$1</span>');
+      // Function definitions
+      html = html.replace(/\b(def\s+)(\w+)/g, '$1<span class="def">$2</span>');
+      // Decorators
+      html = html.replace(/(@\w+)/g, '<span class="decorator">$1</span>');
+      
+      return html;
+    }
+
+    function copyCodeContent() {
+      const activeFile = document.getElementById('codeFileName').textContent;
+      let textToCopy = '';
+      if (activeFile.includes('cv_worker')) textToCopy = codeRepository.cv_worker;
+      else if (activeFile.includes('event_engine')) textToCopy = codeRepository.event_engine;
+      else if (activeFile.includes('capture')) textToCopy = codeRepository.capture;
+      else if (activeFile.includes('mqtt_publisher')) textToCopy = codeRepository.mqtt_publisher;
+      else if (activeFile.includes('service')) textToCopy = codeRepository.systemd;
+      else if (activeFile.includes('lambda')) textToCopy = codeRepository.lambda;
+      
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+        }, 1500);
+      });
+    }
+
+    // --- RESULTS TAB CHARTS INITIALIZATION ---
+    let cpuChart = null;
+    let latencyChart = null;
+
+    function initResultsCharts() {
+      if (cpuChart && latencyChart) return; // Already loaded
+
+      setTimeout(() => {
+        // CPU Chart Load
+        const cpuCtx = document.getElementById('chartCpuLoad').getContext('2d');
+        cpuChart = new Chart(cpuCtx, {
+          type: 'line',
+          data: {
+            labels: ['0s', '10s', '20s', '30s', '40s', '50s', '60s'],
+            datasets: [
+              {
+                label: 'CPU Inference (ARM Host)',
+                data: [96.4, 98.1, 95.9, 98.4, 97.2, 98.9, 96.1],
+                borderColor: '#ef4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.05)',
+                borderWidth: 2,
+                tension: 0.2
+              },
+              {
+                label: 'Hailo NPU Offloaded',
+                data: [44.1, 46.2, 45.1, 48.0, 44.8, 45.3, 44.9],
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                borderWidth: 2,
+                tension: 0.2
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: { color: '#9CA3AF', font: { size: 10 } }
+              }
+            },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } },
+              y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } }
+            }
+          }
+        });
+
+        // Latency Profile Histogram
+        const latCtx = document.getElementById('chartLatency').getContext('2d');
+        latencyChart = new Chart(latCtx, {
+          type: 'bar',
+          data: {
+            labels: ['34ms', '35ms', '36ms', '37ms', '38ms', '39ms', '40ms', '41ms', '42ms+'],
+            datasets: [{
+              label: 'Inference Frequency (NPU)',
+              data: [5, 12, 28, 94, 210, 148, 62, 14, 4],
+              backgroundColor: 'rgba(14, 165, 233, 0.6)',
+              borderColor: '#0ea5e9',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9CA3AF' } }
+            }
+          }
+        });
+      }, 100);
+    }
+
+    // --- DYNAMIC SHARED MEMORY BUFFER ANIMATION ---
+    let writeIndex = 0;
+    let readIndex = 0;
+
+    function animateRingBuffer() {
+      // Loop write pointer rotating, followed by read pointer
+      setInterval(() => {
+        // Deactivate previous slot colors
+        document.getElementById(`slot${writeIndex}`).className = 'ring-slot filled';
+        
+        // Advance write pointer
+        writeIndex = (writeIndex + 1) % 8;
+        const writeSlotEl = document.getElementById(`slot${writeIndex}`);
+        writeSlotEl.className = 'ring-slot writing';
+        
+        // Reposition write arrow label
+        const rect = writeSlotEl.getBoundingClientRect();
+        const wrapperRect = document.querySelector('.ring-wrapper').getBoundingClientRect();
+        const ptrW = document.getElementById('ptrWrite');
+        ptrW.style.top = (writeSlotEl.offsetTop - 18) + 'px';
+        ptrW.style.left = (writeSlotEl.offsetLeft - 4) + 'px';
+        
+      }, 450);
+
+      // Delay read pointer rotation slightly behind
+      setTimeout(() => {
+        setInterval(() => {
+          document.getElementById(`slot${readIndex}`).className = 'ring-slot';
+          
+          // Advance read pointer
+          readIndex = (readIndex + 1) % 8;
+          const readSlotEl = document.getElementById(`slot${readIndex}`);
+          readSlotEl.className = 'ring-slot reading';
+          
+          // Reposition read arrow label
+          const ptrR = document.getElementById('ptrRead');
+          ptrR.style.top = (readSlotEl.offsetTop + 42) + 'px';
+          ptrR.style.left = (readSlotEl.offsetLeft - 4) + 'px';
+          
+        }, 450);
+      }, 900);
+    }
+
+    // --- INTERACTIVE CV SIMULATOR ---
+    let simCanvas = null;
+    let simCtx = null;
+    let simActive = false;
+
+    // Simulation Configurable Zones (User draggable corners)
+    const zones = {
+      loading: {
+        points: [[120, 60], [280, 60], [240, 200], [80, 200]],
+        color: 'rgba(127, 119, 221, 0.45)', // Translucent Purple
+        active: true,
+        name: 'Loading Zone'
+      },
+      restricted: {
+        points: [[360, 100], [520, 100], [500, 260], [320, 260]],
+        color: 'rgba(239, 68, 68, 0.45)', // Translucent Red
+        active: true,
+        name: 'Restricted Zone'
+      },
+      line: {
+        p1: [280, 40],
+        p2: [300, 280],
+        color: '#f59e0b', // Glowing Amber
+        active: true,
+        name: 'Line Boundary'
+      }
+    };
+
+    // Simulated Targets / Bounding Boxes
+    const targets = [
+      {
+        id: 104,
+        type: 'Person',
+        conf: 0.94,
+        x: 40,
+        y: 80,
+        vx: 1.4,
+        vy: 0.1,
+        history: [],
+        dwellTime: 0,
+        alertFired: false
+      },
+      {
+        id: 112,
+        type: 'Person',
+        conf: 0.88,
+        x: 480,
+        y: 40,
+        vx: -1.1,
+        vy: 0.8,
+        history: [],
+        dwellTime: 0,
+        alertFired: false
+      },
+      {
+        id: 201,
+        type: 'Forklift',
+        conf: 0.92,
+        x: 240,
+        y: 280,
+        vx: 0.8,
+        vy: -0.4,
+        history: [],
+        dwellTime: 0,
+        alertFired: false
+      }
+    ];
+
+    let dragNode = null; // Currently selected corner vertex drag coordinates
+
+    function initCvSimulator() {
+      if (simActive) return;
+      simActive = true;
+      
+      simCanvas = document.getElementById('cvSimulator');
+      simCtx = simCanvas.getContext('2d');
+      
+      // Handle physical resolution sizing scaling
+      simCanvas.width = 600;
+      simCanvas.height = 337; // 16:9 aspect ratio
+      
+      // Bind canvas mouse click events for polygon node dragging
+      simCanvas.addEventListener('mousedown', onCanvasMouseDown);
+      simCanvas.addEventListener('mousemove', onCanvasMouseMove);
+      simCanvas.addEventListener('mouseup', onCanvasMouseUp);
+      
+      requestAnimationFrame(runCvLoop);
+      
+      // Output system start messages into the log view
+      addSimLog("CV Pipeline initialized on Hailo-8L PCIe", "info");
+      addSimLog("Ingesting RTSP stream H.264 at 15 FPS", "info");
+    }
+
+    function onCanvasMouseDown(e) {
+      const rect = simCanvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (simCanvas.width / rect.width);
+      const my = (e.clientY - rect.top) * (simCanvas.height / rect.height);
+      
+      const clickRadius = 8;
+      
+      // Check polygon nodes
+      for (const zoneKey of ['loading', 'restricted']) {
+        const zone = zones[zoneKey];
+        if (!zone.active) continue;
+        
+        for (let i = 0; i < zone.points.length; i++) {
+          const p = zone.points[i];
+          const dist = Math.hypot(p[0] - mx, p[1] - my);
+          if (dist < clickRadius) {
+            dragNode = { zone: zoneKey, index: i };
+            return;
+          }
+        }
+      }
+
+      // Check line segment ends
+      if (zones.line.active) {
+        if (Math.hypot(zones.line.p1[0] - mx, zones.line.p1[1] - my) < clickRadius) {
+          dragNode = { zone: 'line', index: 1 };
+          return;
+        }
+        if (Math.hypot(zones.line.p2[0] - mx, zones.line.p2[1] - my) < clickRadius) {
+          dragNode = { zone: 'line', index: 2 };
+          return;
+        }
+      }
+    }
+
+    function onCanvasMouseMove(e) {
+      if (!dragNode) return;
+      
+      const rect = simCanvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (simCanvas.width / rect.width);
+      const my = (e.clientY - rect.top) * (simCanvas.height / rect.height);
+      
+      if (dragNode.zone === 'line') {
+        if (dragNode.index === 1) {
+          zones.line.p1 = [mx, my];
+        } else {
+          zones.line.p2 = [mx, my];
+        }
+      } else {
+        zones.loading.points[dragNode.index] = [mx, my];
+        zones.restricted.points[dragNode.index] = [mx, my];
+      }
+    }
+
+    function onCanvasMouseUp() {
+      dragNode = null;
+    }
+
+    function toggleSimZone(zoneKey) {
+      if (zoneKey === 'line') {
+        zones.line.active = !zones.line.active;
+        document.getElementById('btnLineCross').classList.toggle('active', zones.line.active);
+      } else {
+        zones[zoneKey].active = !zones[zoneKey].active;
+        document.getElementById(zoneKey === 'loading' ? 'btnZoneLoading' : 'btnZoneRestricted').classList.toggle('active', zones[zoneKey].active);
+      }
+    }
+
+    function resetSimZones() {
+      zones.loading.points = [[120, 60], [280, 60], [240, 200], [80, 200]];
+      zones.restricted.points = [[360, 100], [520, 100], [500, 260], [320, 260]];
+      zones.line.p1 = [280, 40];
+      zones.line.p2 = [300, 280];
+      addSimLog("Polygonal detection zones reset to defaults", "info");
+    }
+
+    // Geometry containment maths: Ray Casting check
+    function checkPointInPolygon(pt, poly) {
+      const x = pt[0], y = pt[1];
+      let inside = false;
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        const xi = poly[i][0], yi = poly[i][1];
+        const xj = poly[j][0], yj = poly[j][1];
+        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    // Line crossing evaluation math
+    function checkSegmentIntersection(l1p1, l1p2, l2p1, l2p2) {
+      const [x1, y1] = l1p1;
+      const [x2, y2] = l1p2;
+      const [x3, y3] = l2p1;
+      const [x4, y4] = l2p2;
+      
+      const det = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+      if (det === 0) return false; // Parallel lines
+      
+      const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / det;
+      const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / det;
+      
+      return (t >= 0 && t <= 1 && u >= 0 && u <= 1);
+    }
+
+    function runCvLoop() {
+      if (!simActive) return;
+      
+      // Clear canvas background
+      simCtx.fillStyle = '#0f172a';
+      simCtx.fillRect(0, 0, simCanvas.width, simCanvas.height);
+      
+      // Draw grid floor helper lines
+      simCtx.strokeStyle = 'rgba(255,255,255,0.02)';
+      simCtx.lineWidth = 1;
+      for (let i = 0; i < simCanvas.width; i += 30) {
+        simCtx.beginPath();
+        simCtx.moveTo(i, 0);
+        simCtx.lineTo(i, simCanvas.height);
+        simCtx.stroke();
+      }
+
+      // 1. Draw Zones
+      if (zones.loading.active) {
+        drawZonePolygon(zones.loading);
+      }
+      if (zones.restricted.active) {
+        drawZonePolygon(zones.restricted);
+      }
+      if (zones.line.active) {
+        simCtx.strokeStyle = zones.line.color;
+        simCtx.lineWidth = 3;
+        simCtx.setLineDash([4, 4]);
+        simCtx.beginPath();
+        simCtx.moveTo(zones.line.p1[0], zones.line.p1[1]);
+        simCtx.lineTo(zones.line.p2[0], zones.line.p2[1]);
+        simCtx.stroke();
+        simCtx.setLineDash([]);
+        
+        // Draw endpoints
+        drawDragNode(zones.line.p1);
+        drawDragNode(zones.line.p2);
+      }
+      
+      // 2. Process Targets
+      targets.forEach(target => {
+        // Update velocity physics positions
+        target.x += target.vx;
+        target.y += target.vy;
+        
+        // Bounce off canvas margins
+        if (target.x < 20 || target.x > simCanvas.width - 20) target.vx *= -1;
+        if (target.y < 20 || target.y > simCanvas.height - 20) target.vy *= -1;
+        
+        // Centroid coordinate for evaluation (bottom center of bbox)
+        const bboxW = target.type === 'Forklift' ? 64 : 36;
+        const bboxH = target.type === 'Forklift' ? 48 : 58;
+        const centroid = [target.x, target.y + bboxH / 2];
+        
+        // Record trajectory trail points
+        target.history.push([...centroid]);
+        if (target.history.length > 20) target.history.shift();
+        
+        // Draw historical trajectory trace
+        simCtx.strokeStyle = 'rgba(14, 165, 233, 0.4)';
+        simCtx.lineWidth = 2;
+        simCtx.beginPath();
+        for (let i = 0; i < target.history.length; i++) {
+          const pt = target.history[i];
+          if (i === 0) simCtx.moveTo(pt[0], pt[1]);
+          else simCtx.lineTo(pt[0], pt[1]);
+        }
+        simCtx.stroke();
+        
+        // Evaluate Boundary Zones
+        let inLoadingZone = false;
+        let inRestrictedZone = false;
+        
+        if (zones.loading.active && checkPointInPolygon(centroid, zones.loading.points)) {
+          inLoadingZone = true;
+        }
+        if (zones.restricted.active && checkPointInPolygon(centroid, zones.restricted.points)) {
+          inRestrictedZone = true;
+        }
+        
+        // Handle Zone Rules State transitions
+        if (inLoadingZone) {
+          target.dwellTime += 1 / 60; // 60 FPS update approx
+          document.getElementById('statZoneDwell').textContent = Math.round(target.dwellTime) + 's';
+          
+          if (target.dwellTime > 4 && !target.alertFired) {
+            target.alertFired = true;
+            addSimLog(`LOADING_ZONE_DWELL: ID ${target.id} loitering (${Math.round(target.dwellTime)}s)`, 'warn');
+          }
+        } else if (!inLoadingZone && !inRestrictedZone) {
+          // Exited zone
+          if (target.dwellTime > 0) {
+            target.dwellTime = 0;
+            target.alertFired = false;
+          }
+        }
+        
+        if (inRestrictedZone && !target.alertFired) {
+          target.alertFired = true;
+          addSimLog(`RESTRICTED_BREACH: ID ${target.id} entered Gate B area`, 'danger');
+        } else if (!inRestrictedZone && target.alertFired && target.dwellTime === 0) {
+          target.alertFired = false;
+        }
+        
+        // Evaluate Line Crossing intersects (last segment crossed)
+        if (zones.line.active && target.history.length >= 2) {
+          const lastPt1 = target.history[target.history.length - 2];
+          const lastPt2 = target.history[target.history.length - 1];
+          const crossed = checkSegmentIntersection(lastPt1, lastPt2, zones.line.p1, zones.line.p2);
+          
+          if (crossed) {
+            let count = parseInt(document.getElementById('statCrossings').textContent);
+            document.getElementById('statCrossings').textContent = count + 1;
+            addSimLog(`LINE_CROSSING: ID ${target.id} crossed boundary line`, 'info');
+          }
+        }
+        
+        // Draw Bounding Box HUD
+        const boxColor = inRestrictedZone ? '#ef4444' : (inLoadingZone ? '#7F77DD' : '#0ea5e9');
+        simCtx.strokeStyle = boxColor;
+        simCtx.lineWidth = 2;
+        simCtx.strokeRect(target.x - bboxW/2, target.y - bboxH/2, bboxW, bboxH);
+        
+        // Draw Bounding Box Header label
+        simCtx.fillStyle = boxColor;
+        simCtx.font = '500 10px var(--font-sans)';
+        const labelText = `[ID ${target.id}] ${target.type} ${(target.conf * 100).toFixed(0)}%`;
+        const textWidth = simCtx.measureText(labelText).width;
+        simCtx.fillRect(target.x - bboxW/2 - 1, target.y - bboxH/2 - 14, textWidth + 8, 14);
+        
+        simCtx.fillStyle = '#ffffff';
+        simCtx.fillText(labelText, target.x - bboxW/2 + 3, target.y - bboxH/2 - 4);
+      });
+      
+      // Update Telemetry jitter
+      document.getElementById('telemetryInfer').textContent = (37.5 + Math.random() * 1.5).toFixed(1) + ' ms';
+      document.getElementById('telemetryCpu').textContent = (13.5 + Math.random() * 2.1).toFixed(1) + '%';
+      
+      requestAnimationFrame(runCvLoop);
+    }
+
+    function drawZonePolygon(zone) {
+      simCtx.fillStyle = zone.color;
+      simCtx.strokeStyle = zone.color.replace('0.45', '1');
+      simCtx.lineWidth = 2;
+      
+      simCtx.beginPath();
+      simCtx.moveTo(zone.points[0][0], zone.points[0][1]);
+      for (let i = 1; i < zone.points.length; i++) {
+        simCtx.lineTo(zone.points[i][0], zone.points[i][1]);
+      }
+      simCtx.closePath();
+      simCtx.fill();
+      simCtx.stroke();
+      
+      // Draw drag handle nodes on points
+      zone.points.forEach(pt => drawDragNode(pt));
+    }
+
+    function drawDragNode(pt) {
+      simCtx.fillStyle = '#ffffff';
+      simCtx.strokeStyle = varColor('--color-purple');
+      simCtx.lineWidth = 1;
+      simCtx.beginPath();
+      simCtx.arc(pt[0], pt[1], 4, 0, Math.PI * 2);
+      simCtx.fill();
+      simCtx.stroke();
+    }
+
+    function varColor(variableName) {
+      return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+    }
+
+    function addSimLog(message, level) {
+      const logList = document.getElementById('simLogList');
+      const item = document.createElement('div');
+      item.className = `log-item ${level}`;
+      
+      const ts = new Date().toISOString().split('T')[1].substring(0, 8);
+      
+      item.innerHTML = `
+        <div class="log-header">
+          <span>${ts}</span>
+          <span>${level.toUpperCase()}</span>
+        </div>
+        <div class="log-msg">${message}</div>
+      `;
+      
+      logList.insertBefore(item, logList.firstChild);
+      
+      // Keep only last 10 log messages
+      while (logList.children.length > 8) {
+        logList.removeChild(logList.lastChild);
+      }
+    }
+
+    // --- ON LOAD BOOTSTRAP ---
+    window.onload = function() {
+      lucide.createIcons();
+      animateRingBuffer();
+      loadCodeSample('cv_worker');
+    }
+  </script>
+</body>
+</html>

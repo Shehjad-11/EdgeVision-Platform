@@ -1,0 +1,58 @@
+# deployment/edgevision.service
+[Unit]
+Description=EdgeVision Edge Computer Vision Service
+After=network-online.target systemd-resolved.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vision
+Group=vision
+WorkingDirectory=/opt/edgevision
+ExecStart=/opt/edgevision/venv/bin/python src/main.py
+
+# System Daemon Watchdog config
+# Downstream Python application must notify systemd via sd_notify("WATCHDOG=1")
+# at least once every 30 seconds to prevent daemon termination.
+WatchdogSec=30
+NotifyAccess=main
+Restart=always
+RestartSec=5
+
+# Standard Logging Outputs mapped to OS journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=edgevision
+
+# =========================================================================
+# SYSTEM HARDENING & SANDBOXING CAPABILITIES
+# =========================================================================
+
+# Enforce read-only mounting of core OS filesystems
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+# Block modification of network interfaces, kernel clocks, and sysctl nodes
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+PrivateMounts=true
+
+# Restrict systems capabilities
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+
+# Device Node Access policies: Deny access to host devices except NPU/video
+DevicePolicy=closed
+# Expose Hailo-8L PCIe device node read-write capabilities
+DeviceAllow=/dev/hailo0 rw
+# Expose secondary USB capture interfaces if using local cameras
+DeviceAllow=/dev/video0 r
+
+# System Call restrictions (seccomp filters)
+SystemCallArchitectures=native
+SystemCallFilter=@system-service @privileged
+
+[Install]
+WantedBy=multi-user.target
